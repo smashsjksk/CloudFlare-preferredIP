@@ -1,10 +1,9 @@
-name: Run Python Script Every 15 Minutes
+name: Run Python Script Every 15 Minutes and on Demand
 
 on:
   schedule:
-    # 使用cron语法设置时间间隔，这里的示例表示每15分钟运行一次
-    # 分 时 日 月 周
     - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-script:
