@@ -3,7 +3,7 @@ name: Fetch and Push IP Addresses
 on:
   workflow_dispatch: # 允许手动触发
   schedule:
-    - cron: '*/15 * * * *' # 每15分钟运行一次
+    - cron: '*/5 * * * *' # 每15分钟运行一次
 permissions:
   contents: write
 
