@@ -1,0 +1,23 @@
+name: Run Python Script Every 15 Minutes
+
+on:
+  schedule:
+    # 使用cron语法设置时间间隔，这里的示例表示每15分钟运行一次
+    # 分 时 日 月 周
+    - cron: '*/15 * * * *'
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+      - name: Run script
+        run: python preferred.py
