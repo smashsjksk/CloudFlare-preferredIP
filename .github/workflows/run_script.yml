@@ -20,3 +20,10 @@ jobs:
           pip install requests beautifulsoup4
       - name: Run script
         run: python preferred.py
+      - name: Commit and push if there are changes
+        run: |
+          git config --local user.email "20221805134@llu.edu.cn"
+          git config --local user.name "smsjksk"
+          git add -A
+          git commit -m "Update IP list" -a || echo "No changes to commit"
+          git push
