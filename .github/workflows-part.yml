@@ -1,4 +1,4 @@
-name: Masscan Scan and Convert
+name: Masscan Scan and Convert - part
 
 on:
   workflow_dispatch:
