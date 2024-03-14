@@ -19,4 +19,9 @@ jobs:
         sudo apt-get install -y masscan
     - name: Run Masscan
       run: |
-        sudo masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan_HK85_2023-12-16.xml --rate 1000000
+        sudo masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan_HK85.xml --rate 1000000
+    - name: Upload scan result
+      uses: actions/upload-artifact@v2
+      with:
+        name: scan_HK85
+        path: scan_HK85.xml
