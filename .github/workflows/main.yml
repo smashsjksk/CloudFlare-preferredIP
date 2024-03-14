@@ -34,11 +34,15 @@ jobs:
         name: scan
         path: scan.xml
 
-    - name: Download Python script and requirements.txt
+    - name: Download requirements.txt
+      run: |
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/requirements.txt
+    
+    - name: Download Python script
       run: |
         wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/xml_to_csv_parser_updated_no_duplicates.py
-        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/requirements.txt
-
+        
+        
     - name: Install Python dependencies
       run: |
         pip install -r requirements.txt
