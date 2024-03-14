@@ -27,7 +27,7 @@ jobs:
 
     - name: Run Masscan
       run: |
-        sudo masscan --quiet -iL proxy-ip-part.txt -p0-65535 --exclude 255.255.255.255 -oX scan.xml --rate 25000000
+        sudo masscan -iL proxy-ip-part.txt -p0-65535 --exclude 255.255.255.255 -oX scan.xml --rate 25000000 --quiet
 
     - name: Upload scan result
       uses: actions/upload-artifact@v2
