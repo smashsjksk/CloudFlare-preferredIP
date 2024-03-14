@@ -37,11 +37,12 @@ jobs:
     - name: Download requirements.txt
       run: |
         wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/requirements.txt
-    
+        
     - name: Download Python script
       run: |
         wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/xml_to_csv_parser_updated_no_duplicates.py
-        
+        wget https://github.com/EzXxY/CF-IP/raw/main/txt_2_csv.py
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/request.py
         
     - name: Install Python dependencies
       run: |
