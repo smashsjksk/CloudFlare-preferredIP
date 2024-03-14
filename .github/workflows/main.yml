@@ -1,4 +1,4 @@
-name: Masscan Scan
+name: Masscan Scan and Convert
 
 on:
   push:
@@ -17,11 +17,48 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y masscan
+
+    - name: Install Python and pip
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        pip: true
+
     - name: Run Masscan
       run: |
-        sudo masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan_HK85.xml --rate 1000000
+        sudo masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan.xml --rate 10000000
+
     - name: Upload scan result
       uses: actions/upload-artifact@v2
       with:
-        name: scan_HK85
-        path: scan_HK85.xml
+        name: scan
+        path: scan.xml
+
+    - name: Download Python script and requirements.txt
+      run: |
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/xml_to_csv_parser_updated_no_duplicates.py
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/requirements.txt
+
+    - name: Install Python dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Python script
+      run: |
+        python xml_to_csv_parser_updated_no_duplicates.py ./ ./05-可视化扫描结果.csv
+
+    - name: Upload CSV file
+      uses: actions/upload-artifact@v2
+      with:
+        name: 05-可视化扫描结果
+        path: 05-可视化扫描结果.csv
+
+    - name: Run additional script
+      run: |
+        python request.py
+
+    - name: Upload txt file
+      uses: actions/upload-artifact@v2
+      with:
+        name: 06-提取反代了CF的ip及端口
+        path: 06-提取反代了CF的ip及端口.txt
