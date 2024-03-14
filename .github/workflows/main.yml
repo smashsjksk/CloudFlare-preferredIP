@@ -1,0 +1,25 @@
+name: Masscan Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  masscan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Masscan
+      run: |
+        sudo apt-get update
+        sudo apt-get --assume-yes install git make gcc
+        git clone https://github.com/robertdavidgraham/masscan
+        cd masscan
+        make
+    - name: Run Masscan
+      run: |
+        masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan_HK85_2023-12-16.xml --rate 1000000
