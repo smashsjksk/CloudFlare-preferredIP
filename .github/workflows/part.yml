@@ -21,13 +21,13 @@ jobs:
         python-version: '3.x'
         pip: true
      
-    - name: Download proxy-ip.txt
+    - name: Download proxy-ip-part
       run: |
         wget https://raw.githubusercontent.com/smashsjksk/CloudFlare-preferredIP/main/proxy-ip-part
 
     - name: Run Masscan
       run: |
-        sudo masscan -iL proxy-ip.txt -p0-65535 --exclude 255.255.255.255 -oX scan.xml --rate 25000000
+        sudo masscan -iL proxy-ip-part.txt -p0-65535 --exclude 255.255.255.255 -oX scan.xml --rate 25000000
 
     - name: Upload scan result
       uses: actions/upload-artifact@v2
