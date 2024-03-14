@@ -1,9 +1,6 @@
 name: Masscan Scan and Convert
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -23,10 +20,14 @@ jobs:
       with:
         python-version: '3.x'
         pip: true
+     
+    - name: Download proxy-ip.txt
+      run: |
+        wget https://raw.githubusercontent.com/smashsjksk/CloudFlare-preferredIP/main/proxy-ip.txt
 
     - name: Run Masscan
       run: |
-        sudo masscan 149.62.46.0/24 149.62.47.0/24 157.119.100.0/24 157.119.101.0/24 -p0-65535 -oX scan.xml --rate 10000000
+        sudo masscan  -iL proxy-ip.txt -p0-65535 -oX scan.xml --rate 25000000
 
     - name: Upload scan result
       uses: actions/upload-artifact@v2
@@ -67,3 +68,12 @@ jobs:
       with:
         name: 06-提取反代了CF的ip及端口
         path: 06-提取反代了CF的ip及端口.txt
+    - name: Run script
+      run: |
+        python txt_2_csv.py ./06-提取反代了CF的ip及端口.txt ./07-提取反代了CF的ip及端口.csv
+
+    - name: Upload csv file
+      uses: actions/upload-artifact@v2
+      with:
+        name: 07-提取反代了CF的ip及端口
+        path: 07-提取反代了CF的ip及端口.csv
