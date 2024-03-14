@@ -23,7 +23,7 @@ jobs:
      
     - name: Download proxy-ip-part
       run: |
-        wget -O proxy-ip-part.txt https://raw.githubusercontent.com/smashsjksk/CloudFlare-preferredIP/main/proxy-ip-part
+        wget -O proxy-ip-part.txt https://raw.githubusercontent.com/smashsjksk/CloudFlare-preferredIP/main/proxy-ip-part.txt
 
     - name: Run Masscan
       run: |
