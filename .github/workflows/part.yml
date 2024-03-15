@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2.4.0  # Updated to use Node.js 20
+      uses: actions/checkout@v3  # Updated to use Node.js 20
 
     - name: Install Masscan
       run: |
@@ -16,7 +16,7 @@ jobs:
         sudo apt-get install -y masscan
 
     - name: Install Python and pip
-      uses: actions/setup-python@v2  # Updated to use Node.js 20
+      uses: actions/setup-python@v3  # Updated to use Node.js 20
       with:
         python-version: '3.x'
         pip: true
@@ -30,7 +30,7 @@ jobs:
         sudo masscan -iL proxy-ip-part.txt -p0-65535 --exclude 255.255.255.255 -oX scan.xml --rate 25000000 --quiet
 
     - name: Upload scan result
-      uses: actions/upload-artifact@v2  # Updated to use Node.js 20
+      uses: actions/upload-artifact@v3  # Updated to use Node.js 20
       with:
         name: scan
         path: scan.xml
@@ -54,7 +54,7 @@ jobs:
         python xml_to_csv_parser_updated_no_duplicates.py ./ ./05-可视化扫描结果.csv
 
     - name: Upload CSV file
-      uses: actions/upload-artifact@v2  # Updated to use Node.js 20
+      uses: actions/upload-artifact@v3  # Updated to use Node.js 20
       with:
         name: 05-可视化扫描结果
         path: 05-可视化扫描结果.csv
@@ -64,7 +64,7 @@ jobs:
         python request.py
 
     - name: Upload txt file
-      uses: actions/upload-artifact@v2  # Updated to use Node.js 20
+      uses: actions/upload-artifact@v3  # Updated to use Node.js 20
       with:
         name: 06-提取反代了CF的ip及端口
         path: 06-提取反代了CF的ip及端口.txt
@@ -73,7 +73,7 @@ jobs:
         python txt_2_csv.py ./06-提取反代了CF的ip及端口.txt ./07-提取反代了CF的ip及端口.csv
 
     - name: Upload csv file
-      uses: actions/upload-artifact@v2  # Updated to use Node.js 20
+      uses: actions/upload-artifact@v3  # Updated to use Node.js 20
       with:
         name: 07-提取反代了CF的ip及端口
         path: 07-提取反代了CF的ip及端口.csv
