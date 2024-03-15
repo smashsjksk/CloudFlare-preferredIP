@@ -1,0 +1,101 @@
+name: Masscan Scan and Convert - Optimized
+
+on:
+  workflow_dispatch:
+
+jobs:
+  masscan_scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Masscan
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y masscan
+
+    - name: Download proxy-ip-part
+      run: |
+        wget -O proxy-ip-part.txt https://raw.githubusercontent.com/smashsjksk/CloudFlare-preferredIP/main/proxy-ip-part.txt
+
+    - name: Run Masscan
+      run: |
+        masscan -iL proxy-ip-part.txt -p 20000-22000 --exclude 255.255.255.255 -oX scan.xml --rate 250000000 --quiet
+
+    - name: Upload scan result
+      uses: actions/upload-artifact@v3
+      with:
+        name: scan
+        path: scan.xml
+
+  python_script:
+    runs-on: ubuntu-latest
+    needs: masscan_scan
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Python and pip
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+        pip: true
+
+    - name: Download requirements.txt
+      run: |
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/requirements.txt
+
+    - name: Download Python script
+      run: |
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/xml_to_csv_parser_updated_no_duplicates.py
+        wget https://github.com/EzXxY/CF-IP/raw/main/txt_2_csv.py
+        wget https://raw.githubusercontent.com/EzXxY/CF-IP/main/request.py
+        
+    - name: Install Python dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Python script
+      run: |
+        python xml_to_csv_parser_updated_no_duplicates.py ./ ./05-可视化扫描结果.csv
+
+    - name: Upload CSV file
+      uses: actions/upload-artifact@v3
+      with:
+        name: 05-可视化扫描结果
+        path: 05-可视化扫描结果.csv
+
+  additional_script:
+    runs-on: ubuntu-latest
+    needs: python_script
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Run additional script
+      run: |
+        python request.py
+
+    - name: Upload txt file
+      uses: actions/upload-artifact@v3
+      with:
+        name: 06-提取反代了CF的ip及端口
+        path: 06-提取反代了CF的ip及端口.txt
+
+  txt_to_csv_conversion:
+    runs-on: ubuntu-latest
+    needs: additional_script
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Run script to convert txt to csv
+      run: |
+        python txt_2_csv.py ./06-提取反代了CF的ip及端口.txt ./07-提取反代了CF的ip及端口.csv
+
+    - name: Upload csv file
+      uses: actions/upload-artifact@v3
+      with:
+        name: 07-提取反代了CF的ip及端口
+        path: 07-提取反代了CF的ip及端口.csv
